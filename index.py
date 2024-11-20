@@ -30,13 +30,23 @@ def home():
             db.session.commit()
             return redirect('/')
         except Exception as e:
-            print(f"Error:{e}")
-            return f"Error:{e}"
+            print(f"Error: {e}")
+            return f"Error: {e}"
         # see all task
     else:
         tasks = MyTask.query.order_by(MyTask.created_at).all()
         return render_template('home.html', tasks=tasks)
 
+
+@app.route("/delete/<int:id>")
+def delete(id:int):
+    delete_task = MyTask.query.get_or_404(id)
+    try:
+        db.session.delete(delete_task)
+        db.session.commit()
+        return redirect('/')
+    except Exception as e:
+        return f"Error: {e}"
 
 @app.route('/testing')
 def testing():
